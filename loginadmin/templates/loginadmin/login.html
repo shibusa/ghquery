@@ -1,0 +1,14 @@
+<div id="login">
+    <h1>LOGIN</h1>
+    <form action='/login' method='post'>
+			{% csrf_token %}
+			<p>Account: <input type='text' name='account'></p>
+			<p>Password: <input type='password' name='password'></p>
+			<input type='submit' value='Login'>
+		</form>
+    {% for message in messages %}
+    {% if "logmatch" in message.tags %}
+    <p class="{{ message.tags }}">{{ message }}</p>
+    {% endif %}
+    {% endfor %}
+</div>

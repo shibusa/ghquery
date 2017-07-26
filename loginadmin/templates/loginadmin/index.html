@@ -1,0 +1,13 @@
+<html>
+  <head>
+    {% load staticfiles %}
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'loginadmin/style.css' %}">
+  </head>
+  <body>
+    <!-- Loadbalance django node test -->
+    <p>Currently djangonode: {{ hostname }}</p>
+    {% include 'loginadmin/login.html' %}
+    <!-- {% include 'loginadmin/registration.html' %} -->
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<div id="registration">
+    <h1>REGISTRATION</h1>
+    <form action='/register' method='post'>
+      {% csrf_token %}
+      <p>First Name: <input type='text' name='first'></p>
+      {% for message in messages %}
+      {% if "first" in message.tags %}
+      <p class="{{ message.tags }}">{{ message }}</p>
+      {% endif %}
+      {% endfor %}
+
+      <p>Last Name: <input type='text' name='last'></p>
+      {% for message in messages %}
+      {% if "last" in message.tags %}
+      <p class="{{ message.tags }}">{{ message }}</p>
+      {% endif %}
+      {% endfor %}
+
+      <p>Account: <input type='text' name='account'></p>
+      {% for message in messages %}
+      {% if "accounttaken" in message.tags %}
+      <p class="{{ message.tags }}">{{ message }}</p>
+      {% endif %}
+      {% endfor %}
+
+      <p>Password: <input type='password' name='password'></p>
+      {% for message in messages %}
+      {% if "passlength" in message.tags %}
+      <p class="{{ message.tags }}">{{ message }}</p>
+      {% endif %}
+      {% endfor %}
+
+      <p>Confirm Password: <input type='password' name='confirm'></p>
+      {% for message in messages %}
+      {% if "passmatch" in message.tags %}
+      <p class="{{ message.tags }}">{{ message }}</p>
+      {% endif %}
+      {% endfor %}
+      <p>Admin: <input type="checkbox" name='admin'></p>
+      <input type='submit' value='Register'>
+    </form>
+    {% for message in messages %}
+    {% if "success" in message.tags %}
+    <p class="{{ message.tags }}">{{ message }}</p>
+    {% endif %}
+    {% endfor %}
+</div>

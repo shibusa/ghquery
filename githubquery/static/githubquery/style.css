@@ -1,0 +1,29 @@
+* {
+  font-size:14px;
+  font-family:sans-serif;
+  margin:0px;
+  padding:0px;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+#logout {
+  position:absolute;
+  top:0;
+  right:0;
+}
+
+.success {
+  color:green;
+}
+
+.error {
+  color:red;
+}

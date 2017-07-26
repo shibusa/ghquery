@@ -1,0 +1,78 @@
+<html>
+  <head>
+    {% load staticfiles %}
+    <title>Github Query</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'githubquery/style.css' %}">
+  </head>
+  <body>
+    <!-- Loadbalance django node test -->
+    <p>Currently djangonode: {{ hostname }}</p>
+    {% include 'loginadmin/logout.html' %}
+    <h1>Welcome, {{ request.session.user.first }} {{ request.session.user.last }}!</h1>
+    <br>
+    <h2>Account query</h2>
+    <form action='/githubquery/query' method='post'>
+      {% csrf_token %}
+      Account <input type='text' name='githubaccount'>
+      <input type='submit' value='Submit'>
+      {% for message in messages %}
+        <p class="{{ message.tags}}">{{ message }}</p>
+      {% endfor %}
+    </form>
+
+    <h2>My Queries</h2>
+    <table>
+      <tr>
+        <th>Github Account</th>
+        <th>Repos</th>
+        <th>Delete?</th>
+      </tr>
+      {% for query in self.queries %}
+      <tr>
+        <td>{{ query.githubuserid.githubuser }}</td>
+        <td>
+        {% for repo in self.repos %}
+          {% if repo.githubuserid.id == query.githubuserid.id %}
+          <p>
+            <a href="{{ repo.repourl }}">{{ repo.reponame }}</a>
+            {% if repo.repodescription %}
+             - {{ repo.repodescription }}
+            {% endif %}
+          </p>
+          {% endif %}
+        {% endfor %}
+        </td>
+        <td><a href="delete/{{ query.id }}/">Delete</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+
+
+    <h2>Other Queries</h2>
+    <table>
+      <tr>
+        <th>Github Account</th>
+        <th>Repos</th>
+        <th>Queried by</th>
+      </tr>
+      {% for query in others.queries %}
+      <tr>
+        <td>{{ query.githubuserid.githubuser }}</td>
+        <td>
+        {% for repo in others.repos %}
+          {% if repo.githubuserid.id == query.githubuserid.id %}
+          <p>
+            <a href="{{ repo.repourl }}">{{ repo.reponame }}</a>
+            {% if repo.repodescription %}
+             - {{ repo.repodescription }}
+            {% endif %}
+          </p>
+          {% endif %}
+        {% endfor %}
+        </td>
+        <td>{{ query.userid.first }} {{ query.userid.last }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
