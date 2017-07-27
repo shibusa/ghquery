@@ -32,6 +32,7 @@ def query(request):
     return redirect(rootpath)
 
 def delete(request, query_id):
-    if request.method == "POST":
-        print QueryModel.objects.get(id=query_id).delete()
+    query = QueryModel.objects.get(id=query_id)
+    if query.userid.id == request.session['user']['id']:
+        query.delete()
     return redirect(rootpath)
