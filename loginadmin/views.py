@@ -35,9 +35,9 @@ def sessioncheck(request, action=None):
             context = {"hostname": socket.gethostname()}
             return render(request, 'loginadmin/index.html', context)
         # DO NOT USE IN PRODUCTION, exposes admin console:
-        # elif request.path == requestpath + "admin/":
-        #     context = {"users": User.objects.values('id', 'first', 'last', 'account', 'admin', 'updated_at')}
-        #     return render(request, 'loginadmin/admin.html', context)
+        elif request.path == requestpath + "admin/":
+            context = {"users": User.objects.values('id', 'first', 'last', 'account', 'admin', 'updated_at')}
+            return render(request, 'loginadmin/admin.html', context)
     return redirect(requestpath)
 
 def index(request):
