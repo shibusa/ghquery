@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^login$', views.login, name='login'),
     url(r'^register$', views.register, name='register'),
     url(r'^logout$', views.logout, name='logout'),
+    url(r'^admin/delete/(?P<query_id>[0-9]+)$', views.deleteuser, name='delete'),
 ]

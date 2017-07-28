@@ -24,6 +24,9 @@
         <td>{{ user.last }}</td>
         <td>{{ user.updated_at }}</td>
         <td>{{ user.admin }}</td>
+        {% if user.id != 1 %}
+          <td><a href="delete/{{ user.id }}">Delete</a></td>
+        {% endif %}
       </tr>
       {% endfor %}
     </table>

@@ -2,12 +2,8 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from models import QueryModel
 import socket
-
-# Import login here
-from loginadmin.views import sessioncheck
 
 rootpath = '/'
 
@@ -21,18 +17,12 @@ def index(request):
 
 def query(request):
     if 'user' in request.session:
-        queryresult = QueryModel.objects.query(request)
-        message = "{0} {1}".format(request.POST["githubaccount"], queryresult)
-        if queryresult == "found":
-            messages.success(request, message)
-        elif queryresult == "not found":
-            messages.error(request, message)
-        elif queryresult == "deactivated":
-            messages.info(request, message)
+        QueryModel.objects.query(request)
     return redirect(rootpath)
 
 def delete(request, query_id):
-    query = QueryModel.objects.get(id=query_id)
-    if query.userid.id == request.session['user']['id']:
-        query.delete()
+    if 'user' in request.session:
+        query = QueryModel.objects.get(id=query_id)
+        if query.userid.id == request.session['user']['id']:
+            query.delete()
     return redirect(rootpath)

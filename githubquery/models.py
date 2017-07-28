@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 from loginadmin.models import User
 import requests
 
@@ -13,17 +14,17 @@ class GithubUserManager(models.Manager):
         if statuscode == 200:
             # See if github user has been added to database
             try:
-                return self.get(githubuser=ghacct)
+                return ("found", self.get(githubuser=ghacct))
             # Create entry in database for github user
             except ObjectDoesNotExist:
-                return self.create(githubuser=ghacct)
+                return ("found", self.create(githubuser=ghacct))
         else:
             # Deactivate user and all repos if user was added to database, but no longer exists
             if self.filter(githubuser=ghacct).exists():
                 userupdate = self.get(githubuser=ghacct).update(deactivated=True)
                 RepoModel.objects.filter(githubuserid=userupdate).update(removed=True)
-                return "deactivated"
-            return "not found"
+                return ("deactivated")
+            return ("not found")
 
 class RepoManager(models.Manager):
     def addrepos(self, ghuser, repolist):
@@ -58,12 +59,16 @@ class QueryManager(models.Manager):
         # Ensure github user is in database
         ghuser = GithubUserModel.objects.githubuser(request.POST['githubaccount'])
         # Create query if user is found in GithubUserModel
-        if ghuser != "not found":
-            RepoModel.objects.repo(ghuser)
-            self.create(userid=appuser,githubuserid=ghuser)
-            if ghuser != "deactivated":
-                return "found"
-        return ghuser
+        message = "{0} {1}".format(request.POST["githubaccount"], ghuser[0])
+        if ghuser[0] != "notfound":
+            RepoModel.objects.repo(ghuser[1])
+            self.create(userid=appuser,githubuserid=ghuser[1])
+            if ghuser[0] == "deactivated":
+                messages.info(request, message)
+            else:
+                messages.success(request, message)
+        else:
+            messages.error(request, message)
 
     def displayself(self, appuser):
         queries = self.filter(userid=appuser['id']).prefetch_related('userid', 'githubuserid').order_by('-created_at')
