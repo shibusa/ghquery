@@ -15,15 +15,17 @@ pip install -r requirements.txt
 ```
 ./manage.py makemigrations
 ./manage.py migrate
+./manage.py loaddata init.json
 ```
 3. Start server
 ```
 ./manage.py runserver
 ```
-4. Enable bypass found in loginadmin/views.py
-5. Visit 127.0.0.1:8000/admin in a web browser
-6. Create account
-7. Disable bypass
+4. Login with
+```
+account: admin
+password: password
+```
 
 ### Installation:
 1. Install dependencies found in 'requirements.txt'
